@@ -1,0 +1,1899 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Genetic Analysis Report - Tal Fishman</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700&display=swap');
+
+        :root {
+            --primary: #0f172a;
+            --primary-light: #1e293b;
+            --secondary: #334155;
+            --accent: #f59e0b;
+            --accent-light: #fbbf24;
+            --danger: #dc2626;
+            --danger-light: #fecaca;
+            --warning: #ea580c;
+            --warning-light: #fed7aa;
+            --success: #059669;
+            --success-light: #a7f3d0;
+            --info: #0284c7;
+            --info-light: #bae6fd;
+            --light: #f8fafc;
+            --dark: #0f172a;
+            --gray-50: #f8fafc;
+            --gray-100: #f1f5f9;
+            --gray-200: #e2e8f0;
+            --gray-300: #cbd5e1;
+            --gradient-1: linear-gradient(135deg, #0f172a 0%, #1e3a5f 50%, #0f172a 100%);
+            --gradient-2: linear-gradient(135deg, #059669 0%, #0d9488 100%);
+            --gradient-3: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --shadow-md: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+            --shadow-xl: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.7;
+            color: var(--dark);
+            background: linear-gradient(180deg, var(--gray-50) 0%, var(--gray-100) 100%);
+            font-size: 15px;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        header {
+            background: var(--gradient-1);
+            color: white;
+            padding: 60px 0 50px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            opacity: 0.5;
+        }
+
+        header .container {
+            position: relative;
+            z-index: 1;
+        }
+
+        header h1 {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            letter-spacing: -0.02em;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        header p {
+            opacity: 0.85;
+            font-size: 1.05rem;
+            font-weight: 300;
+            letter-spacing: 0.5px;
+        }
+
+        nav {
+            background: var(--primary);
+            padding: 0;
+            position: -webkit-sticky;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: var(--shadow-md);
+            -webkit-transform: translateZ(0);
+            transform: translateZ(0);
+        }
+
+        nav ul {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 4px;
+            list-style: none;
+            padding: 12px 0;
+        }
+
+        nav a {
+            color: rgba(255,255,255,0.85);
+            text-decoration: none;
+            padding: 10px 16px;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+            font-size: 0.85rem;
+            font-weight: 500;
+            letter-spacing: 0.3px;
+        }
+
+        nav a:hover {
+            background: rgba(255,255,255,0.15);
+            color: white;
+            transform: translateY(-1px);
+        }
+
+        section {
+            padding: 50px 0;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        h2 {
+            font-family: 'Playfair Display', Georgia, serif;
+            color: var(--primary);
+            font-size: 2rem;
+            margin-bottom: 24px;
+            padding-bottom: 12px;
+            border-bottom: 3px solid var(--accent);
+            display: inline-block;
+            letter-spacing: -0.01em;
+        }
+
+        h3 {
+            color: var(--secondary);
+            margin: 28px 0 16px;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .alert {
+            padding: 24px;
+            border-radius: 12px;
+            margin: 20px 0;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid transparent;
+        }
+
+        .alert-danger {
+            background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+            border-left: 4px solid var(--danger);
+            border-color: #fecaca;
+        }
+
+        .alert-warning {
+            background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+            border-left: 4px solid var(--warning);
+            border-color: #fed7aa;
+        }
+
+        .alert-success {
+            background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+            border-left: 4px solid var(--success);
+            border-color: #a7f3d0;
+        }
+
+        .alert-info {
+            background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+            border-left: 4px solid var(--info);
+            border-color: #bfdbfe;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 5px 14px;
+            border-radius: 50px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .badge-danger { background: linear-gradient(135deg, #dc2626, #b91c1c); color: white; }
+        .badge-warning { background: linear-gradient(135deg, #ea580c, #c2410c); color: white; }
+        .badge-success { background: linear-gradient(135deg, #059669, #047857); color: white; }
+        .badge-info { background: linear-gradient(135deg, #0284c7, #0369a1); color: white; }
+
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin: 24px 0;
+            background: white;
+            box-shadow: var(--shadow-md);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        th, td {
+            padding: 14px 18px;
+            text-align: left;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        th {
+            background: var(--gradient-1);
+            color: white;
+            font-weight: 600;
+            font-size: 0.85rem;
+            letter-spacing: 0.3px;
+            text-transform: uppercase;
+        }
+
+        tr:hover {
+            background: var(--gray-50);
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+            margin: 24px 0;
+        }
+
+        .card {
+            background: white;
+            border-radius: 16px;
+            padding: 28px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--gray-200);
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            box-shadow: var(--shadow-lg);
+            transform: translateY(-4px);
+        }
+
+        .card h4 {
+            color: var(--primary);
+            margin-bottom: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .wallet-card {
+            background: var(--gradient-1);
+            color: white;
+            padding: 36px;
+            border-radius: 20px;
+            max-width: 520px;
+            margin: 28px auto;
+            box-shadow: var(--shadow-xl);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .wallet-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 60%);
+        }
+
+        .wallet-card h3 {
+            color: white;
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+            padding-bottom: 14px;
+            margin-bottom: 18px;
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 1.3rem;
+            position: relative;
+        }
+
+        .wallet-card ul {
+            list-style: none;
+            position: relative;
+        }
+
+        .wallet-card li {
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            font-size: 0.95rem;
+        }
+
+        .checklist {
+            list-style: none;
+            background: white;
+            border-radius: 12px;
+            padding: 8px 0;
+            box-shadow: var(--shadow);
+        }
+
+        .checklist li {
+            padding: 14px 20px 14px 50px;
+            position: relative;
+            border-bottom: 1px solid var(--gray-100);
+            transition: background 0.2s ease;
+        }
+
+        .checklist li:hover {
+            background: var(--gray-50);
+        }
+
+        .checklist li:last-child {
+            border-bottom: none;
+        }
+
+        .checklist li::before {
+            content: "";
+            position: absolute;
+            left: 18px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--gray-300);
+            border-radius: 4px;
+            background: white;
+        }
+
+        .highlight {
+            background: linear-gradient(120deg, #fef3c7 0%, #fde68a 100%);
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+
+        footer {
+            background: var(--gradient-1);
+            color: white;
+            padding: 60px 0 50px;
+            text-align: center;
+            position: relative;
+        }
+
+        footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent), var(--success), var(--info), var(--accent));
+        }
+
+        footer p {
+            opacity: 0.8;
+            font-size: 0.9rem;
+            line-height: 1.8;
+        }
+
+        footer p:first-child {
+            max-width: 800px;
+            margin: 0 auto 20px;
+        }
+
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Selection color */
+        ::selection {
+            background: var(--accent);
+            color: var(--primary);
+        }
+
+        /* Better focus styles */
+        a:focus-visible {
+            outline: 2px solid var(--accent);
+            outline-offset: 2px;
+        }
+
+        @media print {
+            nav { display: none; }
+            section { page-break-inside: avoid; }
+            .wallet-card { page-break-inside: avoid; }
+            body { background: white; }
+        }
+
+        @media (max-width: 768px) {
+            header h1 { font-size: 2rem; }
+            header { padding: 40px 0 35px; }
+            nav ul {
+                flex-direction: row;
+                justify-content: flex-start;
+                overflow-x: auto;
+                padding: 10px 16px;
+                gap: 8px;
+            }
+            nav a {
+                white-space: nowrap;
+                padding: 8px 12px;
+                font-size: 0.8rem;
+            }
+            section { padding: 35px 0; }
+            h2 { font-size: 1.6rem; }
+            table { font-size: 0.85rem; }
+            th, td { padding: 10px 12px; }
+            .card-grid { grid-template-columns: 1fr; gap: 16px; }
+            .card { padding: 20px; }
+            .wallet-card { padding: 24px; margin: 20px 16px; }
+        }
+
+        /* Animation for cards on scroll */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        section {
+            animation: fadeInUp 0.5s ease-out;
+        }
+
+        /* Mobile Navigation */
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 10px;
+            z-index: 1001;
+        }
+
+        .hamburger-icon {
+            display: block;
+            width: 24px;
+            height: 2px;
+            background: white;
+            position: relative;
+            transition: background 0.3s;
+        }
+
+        .hamburger-icon::before,
+        .hamburger-icon::after {
+            content: '';
+            position: absolute;
+            width: 24px;
+            height: 2px;
+            background: white;
+            transition: transform 0.3s;
+        }
+
+        .hamburger-icon::before { top: -8px; }
+        .hamburger-icon::after { top: 8px; }
+
+        .menu-toggle[aria-expanded="true"] .hamburger-icon {
+            background: transparent;
+        }
+
+        .menu-toggle[aria-expanded="true"] .hamburger-icon::before {
+            transform: rotate(45deg) translate(5px, 6px);
+        }
+
+        .menu-toggle[aria-expanded="true"] .hamburger-icon::after {
+            transform: rotate(-45deg) translate(5px, -6px);
+        }
+
+        /* Skip Link for Accessibility */
+        .skip-link {
+            position: absolute;
+            top: -40px;
+            left: 0;
+            background: var(--accent);
+            color: var(--primary);
+            padding: 8px 16px;
+            z-index: 1000;
+            transition: top 0.3s;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .skip-link:focus {
+            top: 0;
+        }
+
+        /* Focus Styles for Accessibility */
+        a:focus, button:focus, input:focus {
+            outline: 2px solid var(--accent);
+            outline-offset: 2px;
+        }
+
+        /* Touch Targets */
+        nav a, button, .card {
+            min-height: 44px;
+        }
+
+        /* Responsive Tables */
+        .table-wrapper {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            margin: 1rem 0;
+        }
+
+        /* Dark Mode */
+        .dark-mode {
+            --bg-color: #1a1a2e;
+            --text-color: #e5e5e5;
+            --card-bg: #16213e;
+            --border-color: #374151;
+            background: var(--bg-color);
+            color: var(--text-color);
+        }
+
+        .dark-mode nav,
+        .dark-mode .card,
+        .dark-mode section {
+            background: var(--card-bg);
+            border-color: var(--border-color);
+        }
+
+        .dark-mode table {
+            background: var(--card-bg);
+        }
+
+        .dark-mode th {
+            background: #1e3a5f;
+        }
+
+        .dark-mode td {
+            border-color: var(--border-color);
+        }
+
+        .dark-mode .alert {
+            background: var(--card-bg);
+        }
+
+        .dark-mode .checklist {
+            background: var(--card-bg);
+        }
+
+        .dark-mode .checklist li {
+            border-bottom-color: var(--border-color);
+        }
+
+        .dark-mode footer {
+            background: #0a0a1a;
+        }
+
+        /* Typography Scaling */
+        html {
+            font-size: clamp(14px, 2.5vw, 16px);
+        }
+
+        @media (max-width: 768px) {
+            .menu-toggle {
+                display: block;
+            }
+
+            nav {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                flex-wrap: wrap;
+                position: -webkit-sticky;
+                position: sticky;
+                top: 0;
+                z-index: 100;
+                -webkit-transform: translateZ(0);
+                transform: translateZ(0);
+            }
+
+            nav ul {
+                display: none;
+                width: 100%;
+                flex-direction: column;
+                padding: 0;
+                gap: 0;
+            }
+
+            nav.menu-open ul {
+                display: flex;
+            }
+
+            nav li {
+                width: 100%;
+            }
+
+            nav a {
+                display: block;
+                width: 100%;
+                padding: 12px 16px;
+                border-bottom: 1px solid rgba(255,255,255,0.1);
+                white-space: normal;
+                min-height: 44px;
+            }
+
+            nav li:last-child a {
+                border-bottom: none;
+            }
+
+            .nav-controls {
+                display: flex;
+                align-items: center;
+                padding: 12px 16px;
+            }
+
+            table {
+                font-size: 0.875rem;
+            }
+
+            th, td {
+                padding: 8px;
+            }
+
+            .grid, [style*="grid"], .card-grid {
+                grid-template-columns: 1fr !important;
+            }
+
+            h1 { font-size: clamp(1.5rem, 4vw, 2.5rem); }
+            h2 { font-size: clamp(1.25rem, 3vw, 1.75rem); }
+            h3 { font-size: clamp(1.1rem, 2.5vw, 1.5rem); }
+        }
+
+        html, body {
+            -webkit-overflow-scrolling: touch;
+        }
+
+        /* Nav controls styling */
+        .nav-controls {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+        }
+
+        #gene-search {
+            padding: 8px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            background: white;
+            color: var(--dark);
+            font-size: 0.85rem;
+        }
+
+        .dark-mode #gene-search {
+            background: var(--card-bg);
+            color: var(--text-color);
+            border-color: var(--border-color);
+        }
+
+        #dark-mode-toggle {
+            background: none;
+            border: 1px solid rgba(255,255,255,0.3);
+            border-radius: 6px;
+            padding: 8px 12px;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .dark-mode #dark-mode-toggle {
+            border-color: var(--border-color);
+        }
+    </style>
+</head>
+<body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    <header>
+        <div class="container">
+            <h1>Genetic Analysis Report</h1>
+            <p>Tal Fishman | Generated: January 13, 2026 | 684,396 SNPs Analyzed</p>
+        </div>
+    </header>
+
+    <nav>
+        <button class="menu-toggle" aria-expanded="false" aria-label="Toggle navigation menu">
+            <span class="hamburger-icon"></span>
+        </button>
+        <div class="nav-controls">
+            <input type="search" id="gene-search" placeholder="Search genes..." aria-label="Search genes">
+            <button id="dark-mode-toggle" aria-label="Toggle dark mode">🌙</button>
+        </div>
+        <ul>
+            <li><a href="#alerts">Alerts</a></li>
+            <li><a href="#goodnews">Good News</a></li>
+            <li><a href="#pharma">Medications</a></li>
+            <li><a href="#cardio">Cardiovascular</a></li>
+            <li><a href="#metabolism">Metabolism</a></li>
+            <li><a href="#diet">Diet</a></li>
+            <li><a href="#supplements">Supplements</a></li>
+            <li><a href="#peptides">Peptides</a></li>
+            <li><a href="#inflammation">Inflammation</a></li>
+            <li><a href="#athletic">Athletic</a></li>
+            <li><a href="#circadian">Sleep</a></li>
+            <li><a href="#personality">Personality</a></li>
+            <li><a href="#brain">Brain</a></li>
+            <li><a href="#longevity">Longevity</a></li>
+            <li><a href="#autoimmune">Autoimmune</a></li>
+            <li><a href="#future">Future</a></li>
+            <li><a href="#actions">Actions</a></li>
+        </ul>
+    </nav>
+
+    <main id="main-content" class="container">
+        <!-- CRITICAL ALERTS -->
+        <section id="alerts">
+            <h2>Critical Alerts</h2>
+
+            <div class="alert alert-danger">
+                <strong>AVOID CLOPIDOGREL (Plavix)</strong><br>
+                <span class="badge badge-danger">CYP2C19 *2/*17</span><br>
+                You are an intermediate metabolizer. Use ticagrelor or prasugrel instead. This is an FDA Black Box Warning.
+            </div>
+
+            <div class="alert alert-warning">
+                <strong>Reduced Opioid Sensitivity</strong><br>
+                <span class="badge badge-warning">OPRM1 AG</span><br>
+                You may require higher opioid doses for adequate pain control. Tapentadol or methadone may work better than standard opioids.
+            </div>
+
+            <div class="alert alert-warning">
+                <strong>Slow Acetylator - Drug Metabolism</strong><br>
+                <span class="badge badge-warning">NAT2 *5B/*7B</span><br>
+                Increased hepatotoxicity risk with isoniazid. Slower caffeine metabolism. Monitor liver function with certain medications.
+            </div>
+
+            <div class="alert alert-warning">
+                <strong>Elevated Histamine Intolerance Risk</strong><br>
+                <span class="badge badge-warning">DAO TT + HNMT AG</span><br>
+                49%+ reduced DAO enzyme. May react to aged cheese, wine, fermented foods, cured meats. Consider DAO supplements.
+            </div>
+
+            <div class="alert alert-info">
+                <strong>Incomplete Data - Clinical Testing Recommended</strong><br>
+                <span class="badge badge-info">APOE</span> rs429358 not in dataset - cannot determine E3 vs E4 (Alzheimer's risk)<br>
+                <span class="badge badge-info">CYP2C9</span> *2/*3 not in dataset - get clinical testing before warfarin
+            </div>
+        </section>
+
+        <!-- GOOD NEWS -->
+        <section id="goodnews">
+            <h2>Good News - No Elevated Risk</h2>
+            <div class="card-grid">
+                <div class="card">
+                    <h4>Clotting Disorders</h4>
+                    <span class="badge badge-success">NO RISK</span>
+                    <p>Factor V Leiden: Normal<br>Prothrombin G20210A: Normal</p>
+                </div>
+                <div class="card">
+                    <h4>Diabetes Risk</h4>
+                    <span class="badge badge-success">PROTECTED</span>
+                    <p>TCF7L2: CC/GG protective genotypes</p>
+                </div>
+                <div class="card">
+                    <h4>Statin Safety</h4>
+                    <span class="badge badge-success">NO RISK</span>
+                    <p>SLCO1B1: T/T - No elevated myopathy risk</p>
+                </div>
+                <div class="card">
+                    <h4>Celiac Disease</h4>
+                    <span class="badge badge-success">VERY LOW</span>
+                    <p>HLA-DQ2/DQ8 negative</p>
+                </div>
+                <div class="card">
+                    <h4>Drug Hypersensitivities</h4>
+                    <span class="badge badge-success">LOW RISK</span>
+                    <p>Abacavir, Allopurinol, Carbamazepine: Safe</p>
+                </div>
+                <div class="card">
+                    <h4>Lipoprotein(a)</h4>
+                    <span class="badge badge-success">FAVORABLE</span>
+                    <p>No elevated Lp(a) risk variants</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- PHARMACOGENOMICS -->
+        <section id="pharma">
+            <h2>Pharmacogenomics</h2>
+
+            <h3>CYP450 Drug Metabolism</h3>
+            <table>
+                <tr>
+                    <th>Gene</th>
+                    <th>Genotype</th>
+                    <th>Status</th>
+                    <th>Clinical Impact</th>
+                </tr>
+                <tr>
+                    <td><strong>CYP2C19</strong></td>
+                    <td>*2/*17</td>
+                    <td><span class="badge badge-danger">Intermediate</span></td>
+                    <td>AVOID clopidogrel; PPIs may need adjustment</td>
+                </tr>
+                <tr>
+                    <td><strong>CYP2D6</strong></td>
+                    <td>*1/*2</td>
+                    <td><span class="badge badge-success">Normal</span></td>
+                    <td>Standard dosing for codeine, tramadol, psych meds</td>
+                </tr>
+                <tr>
+                    <td><strong>CYP1A2</strong></td>
+                    <td>AA</td>
+                    <td><span class="badge badge-info">Fast</span></td>
+                    <td>Coffee is protective; can tolerate higher caffeine</td>
+                </tr>
+                <tr>
+                    <td><strong>CYP3A4</strong></td>
+                    <td>*1/*1</td>
+                    <td><span class="badge badge-success">Normal</span></td>
+                    <td>Standard drug metabolism</td>
+                </tr>
+                <tr>
+                    <td><strong>CYP3A5</strong></td>
+                    <td>*3/*3</td>
+                    <td><span class="badge badge-info">Non-expresser</span></td>
+                    <td>Lower tacrolimus doses if ever needed</td>
+                </tr>
+                <tr>
+                    <td><strong>SLCO1B1</strong></td>
+                    <td>T/T</td>
+                    <td><span class="badge badge-success">Normal</span></td>
+                    <td>Standard statin dosing</td>
+                </tr>
+            </table>
+
+            <h3>Other Drug Response Genes</h3>
+            <table>
+                <tr>
+                    <th>Gene</th>
+                    <th>Genotype</th>
+                    <th>Status</th>
+                    <th>Clinical Impact</th>
+                </tr>
+                <tr>
+                    <td><strong>OPRM1</strong></td>
+                    <td>AG</td>
+                    <td><span class="badge badge-warning">Reduced</span></td>
+                    <td>May need higher opioid doses; tapentadol/methadone preferred</td>
+                </tr>
+                <tr>
+                    <td><strong>NAT2</strong></td>
+                    <td>*5B/*7B</td>
+                    <td><span class="badge badge-warning">Slow</span></td>
+                    <td>Isoniazid hepatotoxicity risk; slower caffeine</td>
+                </tr>
+            </table>
+
+            <!-- Wallet Card -->
+            <h3>Pharmacogenomics Wallet Card</h3>
+            <p>Print this card and keep with your medical records:</p>
+            <div class="wallet-card">
+                <h3>PHARMACOGENOMICS CARD - TAL FISHMAN</h3>
+                <ul>
+                    <li><strong>CYP2C19:</strong> *2/*17 Intermediate - AVOID CLOPIDOGREL</li>
+                    <li><strong>OPRM1:</strong> AG - Reduced opioid sensitivity</li>
+                    <li><strong>NAT2:</strong> Slow acetylator - Isoniazid caution</li>
+                    <li><strong>CYP2D6:</strong> Normal metabolizer</li>
+                    <li><strong>CYP1A2:</strong> Fast metabolizer</li>
+                    <li><strong>CYP3A5:</strong> Non-expresser</li>
+                </ul>
+                <p style="font-size:0.8rem; margin-top:15px; opacity:0.8;">
+                    Generated: Jan 2026 | Not a substitute for clinical testing
+                </p>
+            </div>
+        </section>
+
+        <!-- CARDIOVASCULAR -->
+        <section id="cardio">
+            <h2>Cardiovascular Health</h2>
+
+            <table>
+                <tr>
+                    <th>Gene/Locus</th>
+                    <th>Genotype</th>
+                    <th>Risk Level</th>
+                    <th>Notes</th>
+                </tr>
+                <tr>
+                    <td>Factor V Leiden</td>
+                    <td>Normal</td>
+                    <td><span class="badge badge-success">No Risk</span></td>
+                    <td>No clotting mutations</td>
+                </tr>
+                <tr>
+                    <td>Prothrombin</td>
+                    <td>Normal</td>
+                    <td><span class="badge badge-success">No Risk</span></td>
+                    <td>No G20210A mutation</td>
+                </tr>
+                <tr>
+                    <td>9p21 Locus</td>
+                    <td>3/6 risk alleles</td>
+                    <td><span class="badge badge-warning">Intermediate</span></td>
+                    <td>~1.3x coronary artery disease risk</td>
+                </tr>
+                <tr>
+                    <td>ACE/AGT</td>
+                    <td>All heterozygous</td>
+                    <td><span class="badge badge-warning">Elevated</span></td>
+                    <td>Hypertension susceptibility; ARBs > CCBs</td>
+                </tr>
+                <tr>
+                    <td>LPA</td>
+                    <td>Favorable</td>
+                    <td><span class="badge badge-success">Low</span></td>
+                    <td>No elevated Lp(a)</td>
+                </tr>
+                <tr>
+                    <td>APOE</td>
+                    <td>Incomplete</td>
+                    <td><span class="badge badge-info">Unknown</span></td>
+                    <td>Clinical test recommended</td>
+                </tr>
+            </table>
+
+            <div class="alert alert-info">
+                <strong>Blood Pressure Medication Note:</strong> If hypertension treatment is ever needed, genetic data suggests ARBs (like losartan) may be more effective than calcium channel blockers for your genotype.
+            </div>
+        </section>
+
+        <!-- METABOLISM -->
+        <section id="metabolism">
+            <h2>Metabolism & Nutrition</h2>
+
+            <table>
+                <tr>
+                    <th>Gene</th>
+                    <th>Genotype</th>
+                    <th>Finding</th>
+                    <th>Action</th>
+                </tr>
+                <tr>
+                    <td><strong>FTO</strong></td>
+                    <td>TA</td>
+                    <td>Modest obesity risk</td>
+                    <td>High protein 25-30%, don't skip meals</td>
+                </tr>
+                <tr>
+                    <td><strong>PPARG</strong></td>
+                    <td>CC Pro/Pro</td>
+                    <td>Reduced insulin sensitivity</td>
+                    <td>Exercise, moderate fat intake, Mediterranean diet</td>
+                </tr>
+                <tr>
+                    <td><strong>LCT</strong></td>
+                    <td>G/A</td>
+                    <td>Lactase persistent</td>
+                    <td>Can digest dairy normally</td>
+                </tr>
+                <tr>
+                    <td><strong>BCMO1</strong></td>
+                    <td>Variants</td>
+                    <td>Poor vitamin A converter</td>
+                    <td>Eat preformed vitamin A (liver, eggs, dairy)</td>
+                </tr>
+                <tr>
+                    <td><strong>FADS1/2</strong></td>
+                    <td>Major alleles</td>
+                    <td>Efficient converter</td>
+                    <td>Excellent omega-3 supplement response</td>
+                </tr>
+                <tr>
+                    <td><strong>VDR</strong></td>
+                    <td>FokI AA</td>
+                    <td>Reduced receptor activity</td>
+                    <td>Need 4000-6000 IU D3 + K2 + Magnesium</td>
+                </tr>
+            </table>
+
+            <h3>Histamine Metabolism</h3>
+            <div class="alert alert-warning">
+                <strong>Elevated Histamine Intolerance Risk</strong><br>
+                <p><strong>DAO rs10156191:</strong> TT (49%+ reduced enzyme activity)<br>
+                <strong>HNMT rs1050891:</strong> AG (moderately reduced)</p>
+                <p style="margin-top:10px"><strong>May react to:</strong> Aged cheese, wine, fermented foods, cured meats, leftovers</p>
+                <p><strong>Consider:</strong> DAO enzyme supplements before histamine-rich meals</p>
+            </div>
+
+            <h3>Methylation</h3>
+            <table>
+                <tr>
+                    <th>Gene</th>
+                    <th>Genotype</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+                <tr>
+                    <td><strong>MTHFR</strong></td>
+                    <td>C677T + A1298C</td>
+                    <td>Compound heterozygous</td>
+                    <td>Test homocysteine; methylfolate if elevated</td>
+                </tr>
+                <tr>
+                    <td><strong>MTR/MTRR</strong></td>
+                    <td>Variants</td>
+                    <td>Mild B12 concern</td>
+                    <td>Use active B12 forms (methylcobalamin)</td>
+                </tr>
+                <tr>
+                    <td><strong>CBS</strong></td>
+                    <td>Normal</td>
+                    <td>No risk</td>
+                    <td>No sulfur restriction needed</td>
+                </tr>
+                <tr>
+                    <td><strong>FUT2</strong></td>
+                    <td>Secretor</td>
+                    <td>Normal B12 absorption</td>
+                    <td>Good gut Bifidobacteria</td>
+                </tr>
+            </table>
+        </section>
+
+        <!-- PERSONALIZED DIET -->
+        <section id="diet">
+            <h2>Personalized Diet Framework</h2>
+
+            <div class="alert alert-info">
+                <strong>Your Optimal Diet Profile:</strong> Modified Mediterranean with high protein, timed eating, and histamine awareness.
+            </div>
+
+            <h3>Macronutrient Targets</h3>
+            <div class="card-grid">
+                <div class="card">
+                    <h4>Protein: 25-30%</h4>
+                    <p><strong>Why:</strong> FTO TA variant - higher protein improves satiety and reduces overeating</p>
+                    <p><strong>Sources:</strong> Fish, poultry, eggs, legumes, Greek yogurt</p>
+                </div>
+                <div class="card">
+                    <h4>Carbs: 35-45%</h4>
+                    <p><strong>Why:</strong> PPARG CC - moderate carbs with low glycemic focus</p>
+                    <p><strong>Sources:</strong> Vegetables, legumes, whole grains, berries</p>
+                </div>
+                <div class="card">
+                    <h4>Fat: 30-35%</h4>
+                    <p><strong>Why:</strong> FADS efficient - excellent omega-3 response</p>
+                    <p><strong>Sources:</strong> Olive oil, fatty fish, avocado, nuts</p>
+                </div>
+            </div>
+
+            <h3>Foods to Emphasize</h3>
+            <table>
+                <tr><th>Category</th><th>Foods</th><th>Genetic Rationale</th></tr>
+                <tr><td><strong>Fatty Fish</strong></td><td>Salmon, mackerel, sardines 3x/week</td><td>FADS1/2 efficient converter - excellent EPA/DHA response</td></tr>
+                <tr><td><strong>Cruciferous</strong></td><td>Broccoli, cauliflower, Brussels sprouts</td><td>Support GST detox genes (functional)</td></tr>
+                <tr><td><strong>Preformed Vitamin A</strong></td><td>Liver, egg yolks, full-fat dairy</td><td>BCMO1 variants - poor beta-carotene conversion</td></tr>
+                <tr><td><strong>Coffee</strong></td><td>2-4 cups daily (morning)</td><td>CYP1A2 AA fast metabolizer - cardioprotective</td></tr>
+                <tr><td><strong>Olive Oil</strong></td><td>Primary cooking fat</td><td>Mediterranean pattern suits PPARG genotype</td></tr>
+                <tr><td><strong>High Protein Breakfast</strong></td><td>Eggs, Greek yogurt, meat</td><td>FTO + CLOCK morning chronotype</td></tr>
+            </table>
+
+            <h3>Foods to Limit/Avoid</h3>
+            <table>
+                <tr><th>Category</th><th>Foods</th><th>Genetic Rationale</th></tr>
+                <tr><td><strong>High Histamine</strong></td><td>Aged cheese, wine, sauerkraut, cured meats</td><td>DAO TT - 49%+ reduced enzyme</td></tr>
+                <tr><td><strong>Histamine Releasers</strong></td><td>Citrus, tomatoes, chocolate, alcohol</td><td>HNMT AG - moderately reduced</td></tr>
+                <tr><td><strong>Leftovers >24h</strong></td><td>Histamine increases with storage</td><td>Cook fresh when possible</td></tr>
+                <tr><td><strong>Refined Carbs</strong></td><td>White bread, pastries, sugary drinks</td><td>PPARG CC - insulin sensitivity concern</td></tr>
+                <tr><td><strong>Late Night Eating</strong></td><td>Stop eating 3h before bed</td><td>CLOCK AA morning chronotype</td></tr>
+            </table>
+
+            <h3>Meal Timing</h3>
+            <div class="card" style="max-width:600px; margin:20px auto;">
+                <h4>Optimal Eating Window (Based on CLOCK/Circadian Genes)</h4>
+                <table>
+                    <tr><td><strong>Breakfast (largest)</strong></td><td>6:30 - 8:00 AM</td><td>30-35% daily calories</td></tr>
+                    <tr><td><strong>Lunch (moderate)</strong></td><td>12:00 - 1:00 PM</td><td>35-40% daily calories</td></tr>
+                    <tr><td><strong>Dinner (lightest)</strong></td><td>5:30 - 7:00 PM</td><td>25-30% daily calories</td></tr>
+                    <tr><td><strong>Eating Window</strong></td><td>~12 hours max</td><td>Consider 16:8 intermittent fasting</td></tr>
+                </table>
+                <p style="margin-top:15px; font-size:0.9rem;"><strong>Note:</strong> Front-loading calories aligns with your morning chronotype and activates FOXO3 pathway benefits.</p>
+            </div>
+        </section>
+
+        <!-- SUPPLEMENTS -->
+        <section id="supplements">
+            <h2>Supplement Protocol</h2>
+
+            <div class="alert alert-info">
+                <strong>Evidence-Based Approach:</strong> Supplements are organized by evidence tier. Always discuss with your healthcare provider before starting any supplement regimen.
+            </div>
+
+            <h3>Tier 1: Essential (Strong Genetic Evidence)</h3>
+            <table>
+                <tr><th>Supplement</th><th>Dose</th><th>Timing</th><th>Genetic Rationale</th></tr>
+                <tr>
+                    <td><strong>Vitamin D3</strong></td>
+                    <td>4000-6000 IU</td>
+                    <td>Morning with fat</td>
+                    <td>VDR FokI AA - reduced receptor activity</td>
+                </tr>
+                <tr>
+                    <td><strong>Vitamin K2 (MK-7)</strong></td>
+                    <td>100-200 mcg</td>
+                    <td>With D3</td>
+                    <td>Required for D3 calcium direction</td>
+                </tr>
+                <tr>
+                    <td><strong>Magnesium Glycinate</strong></td>
+                    <td>300-400 mg</td>
+                    <td>Evening</td>
+                    <td>D3 cofactor, sleep support</td>
+                </tr>
+                <tr>
+                    <td><strong>EPA/DHA Omega-3</strong></td>
+                    <td>2-3g combined</td>
+                    <td>With meals</td>
+                    <td>FADS1/2 efficient - excellent responder</td>
+                </tr>
+                <tr>
+                    <td><strong>DAO Enzyme</strong></td>
+                    <td>20,000 HDU</td>
+                    <td>15 min before histamine-rich meals</td>
+                    <td>DAO TT - severely reduced enzyme</td>
+                </tr>
+            </table>
+
+            <h3>Tier 2: Recommended (Moderate Evidence)</h3>
+            <table>
+                <tr><th>Supplement</th><th>Dose</th><th>Timing</th><th>Genetic Rationale</th></tr>
+                <tr>
+                    <td><strong>Methylfolate (5-MTHF)</strong></td>
+                    <td>400-800 mcg</td>
+                    <td>Morning</td>
+                    <td>MTHFR compound het - IF homocysteine elevated</td>
+                </tr>
+                <tr>
+                    <td><strong>Methylcobalamin B12</strong></td>
+                    <td>1000 mcg</td>
+                    <td>Morning</td>
+                    <td>MTR/MTRR variants - use active forms</td>
+                </tr>
+                <tr>
+                    <td><strong>Vitamin A (Retinol)</strong></td>
+                    <td>2500-5000 IU</td>
+                    <td>With fat</td>
+                    <td>BCMO1 variants - poor converter</td>
+                </tr>
+                <tr>
+                    <td><strong>Quercetin</strong></td>
+                    <td>500 mg</td>
+                    <td>With meals</td>
+                    <td>Natural antihistamine for DAO support</td>
+                </tr>
+                <tr>
+                    <td><strong>Curcumin (with piperine)</strong></td>
+                    <td>500-1000 mg</td>
+                    <td>With meals</td>
+                    <td>IL6 variants - anti-inflammatory support</td>
+                </tr>
+            </table>
+
+            <h3>Tier 3: Experimental/Frontier (Emerging Evidence)</h3>
+            <div class="alert alert-warning">
+                <strong>Disclaimer:</strong> These supplements have emerging research but less robust evidence. Discuss with a knowledgeable practitioner.
+            </div>
+            <table>
+                <tr><th>Supplement</th><th>Dose</th><th>Rationale</th><th>Evidence Level</th></tr>
+                <tr>
+                    <td><strong>NMN (Nicotinamide Mononucleotide)</strong></td>
+                    <td>250-500 mg</td>
+                    <td>NAD+ precursor for FOXO3 pathway</td>
+                    <td><span class="badge badge-warning">Emerging</span></td>
+                </tr>
+                <tr>
+                    <td><strong>Resveratrol</strong></td>
+                    <td>250-500 mg</td>
+                    <td>SIRT1 activator for longevity</td>
+                    <td><span class="badge badge-warning">Emerging</span></td>
+                </tr>
+                <tr>
+                    <td><strong>Spermidine</strong></td>
+                    <td>1-5 mg</td>
+                    <td>Autophagy enhancement</td>
+                    <td><span class="badge badge-warning">Emerging</span></td>
+                </tr>
+                <tr>
+                    <td><strong>Sulforaphane</strong></td>
+                    <td>10-30 mg</td>
+                    <td>NRF2 activation, detox support</td>
+                    <td><span class="badge badge-info">Moderate</span></td>
+                </tr>
+            </table>
+
+            <h3>Supplements to AVOID</h3>
+            <table>
+                <tr><th>Supplement</th><th>Reason</th></tr>
+                <tr><td><strong>Folic Acid (synthetic)</strong></td><td>MTHFR compound het - use methylfolate instead</td></tr>
+                <tr><td><strong>Cyanocobalamin B12</strong></td><td>MTR/MTRR variants - use methylcobalamin instead</td></tr>
+                <tr><td><strong>High-dose Beta Carotene</strong></td><td>BCMO1 variants - poor converter, won't help</td></tr>
+                <tr><td><strong>Iron (unless deficient)</strong></td><td>No genetic indication; test before supplementing</td></tr>
+            </table>
+        </section>
+
+        <!-- PEPTIDES -->
+        <section id="peptides">
+            <h2>Peptides (Frontier/Experimental)</h2>
+
+            <div class="alert alert-danger">
+                <strong>CRITICAL DISCLAIMER:</strong><br>
+                Peptides are RESEARCH COMPOUNDS, NOT FDA-approved medications. There are NO human clinical trials for most of these compounds. Source quality cannot be guaranteed. This information is for educational purposes only. Discuss with a physician before considering any peptides. The author assumes no liability for peptide use.
+            </div>
+
+            <h3>Tier 1: Most Studied (Relative to Other Peptides)</h3>
+            <table>
+                <tr><th>Peptide</th><th>Primary Research Focus</th><th>Potential Relevance to Your Genetics</th><th>Evidence</th></tr>
+                <tr>
+                    <td><strong>BPC-157</strong></td>
+                    <td>Gut healing, tissue repair, angiogenesis</td>
+                    <td>DAO deficiency gut support; injury recovery for athletes</td>
+                    <td><span class="badge badge-warning">Animal Studies</span></td>
+                </tr>
+                <tr>
+                    <td><strong>TB-500 (Thymosin Beta-4)</strong></td>
+                    <td>Tissue repair, inflammation modulation</td>
+                    <td>IL6 variants; athletic recovery support</td>
+                    <td><span class="badge badge-warning">Animal Studies</span></td>
+                </tr>
+                <tr>
+                    <td><strong>GHK-Cu</strong></td>
+                    <td>Collagen synthesis, wound healing, anti-aging</td>
+                    <td>Skin health; general anti-aging (topical safer)</td>
+                    <td><span class="badge badge-info">Some Human</span></td>
+                </tr>
+            </table>
+
+            <h3>Tier 2: Less Studied</h3>
+            <table>
+                <tr><th>Peptide</th><th>Primary Research Focus</th><th>Potential Relevance</th><th>Evidence</th></tr>
+                <tr>
+                    <td><strong>Epithalon</strong></td>
+                    <td>Telomerase activation</td>
+                    <td>TERT variants; longevity research</td>
+                    <td><span class="badge badge-danger">Very Limited</span></td>
+                </tr>
+                <tr>
+                    <td><strong>Thymosin Alpha-1</strong></td>
+                    <td>Immune modulation</td>
+                    <td>Immune optimization</td>
+                    <td><span class="badge badge-info">Some Human</span></td>
+                </tr>
+                <tr>
+                    <td><strong>SS-31 (Elamipretide)</strong></td>
+                    <td>Mitochondrial function</td>
+                    <td>SOD2 pathway support; energy</td>
+                    <td><span class="badge badge-warning">Clinical Trials</span></td>
+                </tr>
+                <tr>
+                    <td><strong>DSIP</strong></td>
+                    <td>Sleep regulation</td>
+                    <td>CLOCK genes; sleep optimization</td>
+                    <td><span class="badge badge-danger">Limited</span></td>
+                </tr>
+            </table>
+
+            <h3>Tier 3: Highly Experimental</h3>
+            <div class="alert alert-danger">
+                <strong>Extreme Caution:</strong> These compounds have minimal human research. Effects are largely theoretical.
+            </div>
+            <table>
+                <tr><th>Peptide</th><th>Research Focus</th><th>Notes</th></tr>
+                <tr>
+                    <td><strong>Dihexa</strong></td>
+                    <td>Cognitive enhancement (HGF pathway)</td>
+                    <td>Extremely potent; unknown safety profile</td>
+                </tr>
+                <tr>
+                    <td><strong>Semax</strong></td>
+                    <td>Nootropic, BDNF modulation</td>
+                    <td>May complement BDNF Val/Val genotype</td>
+                </tr>
+                <tr>
+                    <td><strong>Selank</strong></td>
+                    <td>Anxiolytic, immune modulation</td>
+                    <td>GABA/serotonin modulation</td>
+                </tr>
+                <tr>
+                    <td><strong>MOTS-c</strong></td>
+                    <td>Mitochondrial-derived, metabolism</td>
+                    <td>PPARG/FTO pathway relevance</td>
+                </tr>
+            </table>
+
+            <div class="alert alert-warning">
+                <strong>If Considering Peptides:</strong>
+                <ul style="margin-top:10px;">
+                    <li>Work with a physician experienced in peptide therapy</li>
+                    <li>Source from reputable compounding pharmacies when possible</li>
+                    <li>Start with lowest effective doses</li>
+                    <li>Monitor bloodwork regularly</li>
+                    <li>Report any adverse effects immediately</li>
+                    <li>Consider topical/oral routes before injection</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- INFLAMMATION -->
+        <section id="inflammation">
+            <h2>Inflammation & Oxidative Stress</h2>
+
+            <table>
+                <tr>
+                    <th>Gene</th>
+                    <th>Genotype</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+                <tr>
+                    <td><strong>IL6</strong></td>
+                    <td>Variants present</td>
+                    <td><span class="badge badge-warning">Moderate-High</span></td>
+                    <td>Anti-inflammatory diet focus; omega-3, turmeric, ginger</td>
+                </tr>
+                <tr>
+                    <td><strong>TNF-α</strong></td>
+                    <td>rs1800629 GG</td>
+                    <td><span class="badge badge-success">Protective</span></td>
+                    <td>Lower basal TNF-α levels (favorable)</td>
+                </tr>
+                <tr>
+                    <td><strong>TNF-α</strong></td>
+                    <td>rs1799724 TT</td>
+                    <td><span class="badge badge-info">Watch</span></td>
+                    <td>Monitor for spondyloarthritis if back pain</td>
+                </tr>
+                <tr>
+                    <td><strong>SOD2</strong></td>
+                    <td>rs4880 AA (Ala/Ala)</td>
+                    <td><span class="badge badge-success">Efficient</span></td>
+                    <td>30-40% higher antioxidant activity; NAC beneficial</td>
+                </tr>
+                <tr>
+                    <td><strong>GSTM1/GSTT1</strong></td>
+                    <td>Present</td>
+                    <td><span class="badge badge-success">Functional</span></td>
+                    <td>Good Phase II detox; cruciferous vegetables support</td>
+                </tr>
+                <tr>
+                    <td><strong>GSTP1</strong></td>
+                    <td>Present</td>
+                    <td><span class="badge badge-success">Functional</span></td>
+                    <td>Good glutathione conjugation capacity</td>
+                </tr>
+            </table>
+
+            <div class="alert alert-info">
+                <strong>Inflammation Management:</strong> Your IL6 variants suggest focusing on anti-inflammatory lifestyle: omega-3 fatty acids (EPA/DHA), curcumin/turmeric, regular exercise, stress management. Your SOD2 Ala/Ala genotype means efficient mitochondrial antioxidant capacity - NAC supplements will be well-utilized.
+            </div>
+        </section>
+
+        <!-- ATHLETIC -->
+        <section id="athletic">
+            <h2>Athletic Performance</h2>
+
+            <table>
+                <tr>
+                    <th>Gene</th>
+                    <th>Genotype</th>
+                    <th>Profile</th>
+                    <th>Implication</th>
+                </tr>
+                <tr>
+                    <td><strong>ACTN3</strong></td>
+                    <td>R/X</td>
+                    <td><span class="badge badge-info">Hybrid</span></td>
+                    <td>Both power AND endurance potential</td>
+                </tr>
+                <tr>
+                    <td><strong>ACE</strong></td>
+                    <td>GA</td>
+                    <td><span class="badge badge-info">Intermediate</span></td>
+                    <td>Versatile athletic profile</td>
+                </tr>
+                <tr>
+                    <td><strong>COL1A1</strong></td>
+                    <td>CC</td>
+                    <td><span class="badge badge-success">Normal</span></td>
+                    <td>Low bone fracture risk, typical injury risk</td>
+                </tr>
+                <tr>
+                    <td><strong>CYP1A2</strong></td>
+                    <td>AA</td>
+                    <td><span class="badge badge-success">Fast</span></td>
+                    <td>Caffeine is ergogenic (performance-enhancing)</td>
+                </tr>
+            </table>
+
+            <div class="card-grid">
+                <div class="card">
+                    <h4>Training Recommendations</h4>
+                    <ul>
+                        <li>Concurrent training (power + endurance)</li>
+                        <li>Don't specialize too early</li>
+                        <li>Coffee/caffeine before workouts beneficial</li>
+                        <li>Progressive loading for connective tissue</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h4>Sports Suited For</h4>
+                    <ul>
+                        <li>Team sports (soccer, basketball)</li>
+                        <li>Martial arts</li>
+                        <li>CrossFit</li>
+                        <li>Swimming</li>
+                        <li>Cycling</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- CIRCADIAN -->
+        <section id="circadian">
+            <h2>Circadian Rhythm & Sleep</h2>
+
+            <table>
+                <tr>
+                    <th>Gene</th>
+                    <th>Genotype</th>
+                    <th>Finding</th>
+                </tr>
+                <tr>
+                    <td><strong>CLOCK</strong></td>
+                    <td>rs1801260 AA</td>
+                    <td>Morning chronotype - natural early riser</td>
+                </tr>
+                <tr>
+                    <td><strong>MTNR1B</strong></td>
+                    <td>rs10830963 CC</td>
+                    <td>Normal melatonin sensitivity, protected glucose</td>
+                </tr>
+            </table>
+
+            <div class="card" style="max-width:500px; margin:20px auto; text-align:center;">
+                <h4>Optimal Schedule</h4>
+                <p><strong>Wake:</strong> 6:00 - 7:00 AM</p>
+                <p><strong>Peak Performance:</strong> Morning to early afternoon</p>
+                <p><strong>Sleep:</strong> 9:30 - 10:30 PM</p>
+                <p><strong>Meal Timing:</strong> Front-load calories (larger breakfast/lunch)</p>
+                <p style="color:var(--warning);"><strong>Shift Work Tolerance:</strong> LOW</p>
+            </div>
+        </section>
+
+        <!-- PERSONALITY -->
+        <section id="personality">
+            <h2>Personality & Cognitive Profile</h2>
+
+            <div class="alert alert-info">
+                <strong>Important Note:</strong> Personality is 40-60% heritable; environment, experiences, and choices matter enormously. These genetic insights are tendencies, not destiny.
+            </div>
+
+            <h3>Stress Response Profile</h3>
+            <div class="card-grid">
+                <div class="card">
+                    <h4>COMT: Val/Met (Intermediate)</h4>
+                    <p><strong>Profile:</strong> "Flexible Responder"</p>
+                    <p>Neither warrior (Val/Val) nor worrier (Met/Met). You have balanced dopamine clearance, allowing adaptation to different situations.</p>
+                    <p><strong>Strengths:</strong> Adaptable under pressure, good baseline focus</p>
+                </div>
+                <div class="card">
+                    <h4>MAO-A: Normal/High Activity</h4>
+                    <p><strong>Profile:</strong> Balanced serotonin/dopamine breakdown</p>
+                    <p>NOT the "warrior gene" variant. Lower aggression tendency, more measured responses.</p>
+                    <p><strong>Strengths:</strong> Emotional regulation, impulse control</p>
+                </div>
+            </div>
+
+            <h3>Cognitive Strengths</h3>
+            <table>
+                <tr><th>Trait</th><th>Genetic Profile</th><th>Tendency</th></tr>
+                <tr>
+                    <td><strong>Neuroplasticity</strong></td>
+                    <td>BDNF Val/Val (CC)</td>
+                    <td><span class="badge badge-success">Optimal</span> Full benefits from exercise, learning</td>
+                </tr>
+                <tr>
+                    <td><strong>Memory Formation</strong></td>
+                    <td>BDNF Val/Val</td>
+                    <td><span class="badge badge-success">Enhanced</span> Better long-term potentiation</td>
+                </tr>
+                <tr>
+                    <td><strong>Stress Adaptability</strong></td>
+                    <td>COMT Val/Met</td>
+                    <td><span class="badge badge-info">Flexible</span> Can shift between modes</td>
+                </tr>
+                <tr>
+                    <td><strong>Reward Processing</strong></td>
+                    <td>DRD2 Normal</td>
+                    <td><span class="badge badge-success">Balanced</span> Good D2 availability</td>
+                </tr>
+                <tr>
+                    <td><strong>Novelty Seeking</strong></td>
+                    <td>DRD4 Normal</td>
+                    <td><span class="badge badge-info">Moderate</span> Curious but not reckless</td>
+                </tr>
+            </table>
+
+            <h3>Risk & Resilience Factors</h3>
+            <div class="card-grid">
+                <div class="card">
+                    <h4>Addiction Risk</h4>
+                    <span class="badge badge-success">Lower Than Average</span>
+                    <p>DRD2 normal variants = adequate dopamine receptors. Lower drive for external stimulation.</p>
+                </div>
+                <div class="card">
+                    <h4>Depression Resilience</h4>
+                    <span class="badge badge-info">Moderate-Good</span>
+                    <p>SLC6A4 GG = normal serotonin transporter. Exercise highly protective (BDNF Val/Val).</p>
+                </div>
+                <div class="card">
+                    <h4>Anxiety Tendency</h4>
+                    <span class="badge badge-info">Average</span>
+                    <p>COMT intermediate means you won't be paralyzed by stress or reckless under pressure.</p>
+                </div>
+                <div class="card">
+                    <h4>Caffeine Anxiety</h4>
+                    <span class="badge badge-success">Low Risk</span>
+                    <p>CYP1A2 AA fast metabolizer = less jitteriness from coffee.</p>
+                </div>
+            </div>
+
+            <h3>Optimizing Your Cognitive Profile</h3>
+            <table>
+                <tr><th>Leverage</th><th>Strategy</th><th>Genetic Basis</th></tr>
+                <tr>
+                    <td><strong>Exercise for Brain</strong></td>
+                    <td>Aerobic exercise 3-5x/week</td>
+                    <td>BDNF Val/Val = maximum neuroplasticity benefits</td>
+                </tr>
+                <tr>
+                    <td><strong>Learning Windows</strong></td>
+                    <td>Study/learn in morning hours</td>
+                    <td>CLOCK AA morning chronotype</td>
+                </tr>
+                <tr>
+                    <td><strong>Caffeine Use</strong></td>
+                    <td>Coffee before cognitive tasks</td>
+                    <td>CYP1A2 fast + low anxiety risk</td>
+                </tr>
+                <tr>
+                    <td><strong>Stress Management</strong></td>
+                    <td>Moderate intensity works well</td>
+                    <td>COMT intermediate = flexible responder</td>
+                </tr>
+            </table>
+        </section>
+
+        <!-- BRAIN -->
+        <section id="brain">
+            <h2>Neurotransmitters & Mental Health</h2>
+
+            <table>
+                <tr>
+                    <th>Gene</th>
+                    <th>Genotype</th>
+                    <th>Profile</th>
+                </tr>
+                <tr>
+                    <td><strong>COMT</strong></td>
+                    <td>Val/Met (GA)</td>
+                    <td>Intermediate - flexible stress response</td>
+                </tr>
+                <tr>
+                    <td><strong>BDNF</strong></td>
+                    <td>Val/Val (CC)</td>
+                    <td>Optimal neuroplasticity from exercise</td>
+                </tr>
+                <tr>
+                    <td><strong>DRD2/DRD4</strong></td>
+                    <td>Normal variants</td>
+                    <td>Good D2 availability, lower addiction risk</td>
+                </tr>
+                <tr>
+                    <td><strong>MAO-A</strong></td>
+                    <td>rs1137070 T</td>
+                    <td>Normal/high activity (NOT warrior gene variant)</td>
+                </tr>
+                <tr>
+                    <td><strong>SLC6A4</strong></td>
+                    <td>rs25532 GG</td>
+                    <td>Normal serotonin transporter expression</td>
+                </tr>
+            </table>
+
+            <div class="alert alert-success">
+                <strong>Summary:</strong> Balanced dopamine system, optimal neuroplasticity benefits from exercise, lower-than-average addiction risk, and flexible stress response (neither extreme warrior nor worrier type).
+            </div>
+        </section>
+
+        <!-- LONGEVITY -->
+        <section id="longevity">
+            <h2>Longevity & Aging</h2>
+
+            <table>
+                <tr>
+                    <th>Gene</th>
+                    <th>Genotype</th>
+                    <th>Status</th>
+                </tr>
+                <tr>
+                    <td><strong>FOXO3</strong></td>
+                    <td>rs2802292 TT</td>
+                    <td><span class="badge badge-warning">NOT protective</span></td>
+                </tr>
+                <tr>
+                    <td><strong>TERT</strong></td>
+                    <td>rs2736100 CA</td>
+                    <td><span class="badge badge-info">Intermediate</span></td>
+                </tr>
+                <tr>
+                    <td><strong>TERT</strong></td>
+                    <td>rs2736098 CC</td>
+                    <td><span class="badge badge-success">Favorable</span></td>
+                </tr>
+                <tr>
+                    <td><strong>TERC</strong></td>
+                    <td>Heterozygous</td>
+                    <td><span class="badge badge-info">Average</span></td>
+                </tr>
+            </table>
+
+            <div class="alert alert-warning">
+                <strong>FOXO3 TT - Lifestyle Interventions Critical</strong><br>
+                <p>Without the protective FOXO3 variant, prioritize these lifestyle factors that activate the FOXO3 pathway:</p>
+                <ul style="margin-top:10px;">
+                    <li><strong>Intermittent fasting</strong> - activates FOXO3</li>
+                    <li><strong>Regular exercise</strong> - especially HIIT</li>
+                    <li><strong>Heat exposure</strong> - sauna</li>
+                    <li><strong>Caloric restriction</strong> - when appropriate</li>
+                </ul>
+            </div>
+
+            <p><strong>Telomere Assessment:</strong> Overall AVERAGE to SLIGHTLY ABOVE AVERAGE. The balanced heterozygous states may actually be optimal, avoiding both cancer risks (very long telomeres) and premature aging (very short telomeres).</p>
+        </section>
+
+        <!-- AUTOIMMUNE -->
+        <section id="autoimmune">
+            <h2>Autoimmune & HLA</h2>
+
+            <table>
+                <tr>
+                    <th>Condition</th>
+                    <th>Risk Level</th>
+                    <th>Notes</th>
+                </tr>
+                <tr>
+                    <td>Celiac Disease</td>
+                    <td><span class="badge badge-success">Very Low</span></td>
+                    <td>HLA-DQ2/DQ8 negative</td>
+                </tr>
+                <tr>
+                    <td>Type 1 Diabetes</td>
+                    <td><span class="badge badge-success">Low</span></td>
+                    <td>PTPN22 protective</td>
+                </tr>
+                <tr>
+                    <td>Rheumatoid Arthritis</td>
+                    <td><span class="badge badge-info">Low-Moderate</span></td>
+                    <td>Monitor if joint symptoms develop</td>
+                </tr>
+                <tr>
+                    <td>Multiple Sclerosis</td>
+                    <td><span class="badge badge-success">Low</span></td>
+                    <td>Protective genotypes</td>
+                </tr>
+                <tr>
+                    <td>Ankylosing Spondylitis</td>
+                    <td><span class="badge badge-success">Low</span></td>
+                    <td>HLA-B27 negative</td>
+                </tr>
+                <tr>
+                    <td>Thyroid Autoimmune</td>
+                    <td><span class="badge badge-warning">Moderate</span></td>
+                    <td>Monitor thyroid function periodically</td>
+                </tr>
+            </table>
+        </section>
+
+        <!-- FUTURE OUTLOOK -->
+        <section id="future">
+            <h2>Future Outlook & Emerging Treatments</h2>
+
+            <div class="alert alert-info">
+                <strong>Personalized Medicine Horizon:</strong> Your genetic data positions you to benefit from emerging treatments as they become available. This section covers technologies to watch.
+            </div>
+
+            <h3>Gene Therapies to Watch</h3>
+            <table>
+                <tr><th>Target</th><th>Your Relevance</th><th>Status</th><th>Timeline Estimate</th></tr>
+                <tr>
+                    <td><strong>PCSK9 Inhibitors (Gene Silencing)</strong></td>
+                    <td>9p21 intermediate risk - potential benefit</td>
+                    <td><span class="badge badge-success">Available</span></td>
+                    <td>Now (Inclisiran approved)</td>
+                </tr>
+                <tr>
+                    <td><strong>APOE Gene Editing</strong></td>
+                    <td>Get APOE tested - if E4, watch this space</td>
+                    <td><span class="badge badge-warning">Research</span></td>
+                    <td>5-10 years</td>
+                </tr>
+                <tr>
+                    <td><strong>Telomere Extension</strong></td>
+                    <td>TERT intermediate - may benefit</td>
+                    <td><span class="badge badge-danger">Early Research</span></td>
+                    <td>10+ years</td>
+                </tr>
+                <tr>
+                    <td><strong>FOXO3 Activators</strong></td>
+                    <td>TT non-protective - high interest</td>
+                    <td><span class="badge badge-warning">Research</span></td>
+                    <td>5-10 years</td>
+                </tr>
+            </table>
+
+            <h3>Precision Medicine Advances</h3>
+            <div class="card-grid">
+                <div class="card">
+                    <h4>Pharmacogenomic Integration</h4>
+                    <p>Your CYP2C19 *2/*17 status will be increasingly used in prescribing. Ask providers to check before starting new medications.</p>
+                </div>
+                <div class="card">
+                    <h4>AI Drug Discovery</h4>
+                    <p>Drugs targeting specific genetic variants (like your PPARG CC) are in development using AI-accelerated pipelines.</p>
+                </div>
+                <div class="card">
+                    <h4>Microbiome + Genetics</h4>
+                    <p>Your FUT2 secretor status and DAO variants make you a candidate for personalized probiotic therapies (emerging).</p>
+                </div>
+                <div class="card">
+                    <h4>Senolytic Therapies</h4>
+                    <p>FOXO3 TT may respond well to senolytics (dasatinib + quercetin protocol in clinical trials).</p>
+                </div>
+            </div>
+
+            <h3>Clinical Trials to Consider</h3>
+            <table>
+                <tr><th>Category</th><th>Why Relevant</th><th>Where to Look</th></tr>
+                <tr>
+                    <td><strong>Histamine Intolerance</strong></td>
+                    <td>DAO TT - novel enzyme therapies</td>
+                    <td>ClinicalTrials.gov: "histamine intolerance"</td>
+                </tr>
+                <tr>
+                    <td><strong>Longevity/Aging</strong></td>
+                    <td>FOXO3 TT, TERT variants</td>
+                    <td>ClinicalTrials.gov: "healthy aging" + TAME trial</td>
+                </tr>
+                <tr>
+                    <td><strong>Metabolic Health</strong></td>
+                    <td>PPARG CC, FTO TA</td>
+                    <td>GLP-1 agonist combination trials</td>
+                </tr>
+                <tr>
+                    <td><strong>Cardiovascular Prevention</strong></td>
+                    <td>9p21 intermediate risk</td>
+                    <td>REDUCE-IT type trials</td>
+                </tr>
+            </table>
+
+            <h3>Preparation Checklist for Precision Medicine Era</h3>
+            <ul class="checklist">
+                <li>Keep this genetic report accessible to healthcare providers</li>
+                <li>Get clinical APOE and CYP2C9 testing for complete pharmacogenomic profile</li>
+                <li>Request pharmacogenomic review before any new long-term medications</li>
+                <li>Follow longevity research (Attia, Sinclair, Horvath for updates)</li>
+                <li>Consider biobanking (blood/tissue) for future personalized therapies</li>
+                <li>Track biological age markers annually (epigenetic clocks becoming available)</li>
+            </ul>
+
+            <div class="alert alert-warning">
+                <strong>Timeframes Are Estimates:</strong> Medical technology timelines are uncertain. Focus on evidence-based interventions now while monitoring emerging options.
+            </div>
+        </section>
+
+        <!-- ACTION ITEMS -->
+        <section id="actions">
+            <h2>Action Items</h2>
+
+            <h3>Priority 1 - Medical (Discuss with Doctor)</h3>
+            <ul class="checklist">
+                <li>Share CYP2C19 status - <strong class="highlight">AVOID clopidogrel</strong></li>
+                <li>Share OPRM1 status - reduced opioid response, may need dose adjustment</li>
+                <li>Share NAT2 status - slow acetylator (isoniazid hepatotoxicity risk)</li>
+                <li>Get clinical CYP2C9 testing before any warfarin prescription</li>
+                <li>Get clinical APOE testing if you want Alzheimer's risk information</li>
+                <li>Get fasting homocysteine blood test</li>
+                <li>Get 25-OH vitamin D level</li>
+                <li>Monitor thyroid function periodically</li>
+            </ul>
+
+            <h3>Priority 2 - Lifestyle</h3>
+            <ul class="checklist">
+                <li>Morning schedule alignment (wake 6-7 AM, sleep 9:30-10:30 PM)</li>
+                <li>High protein diet (25-30% of calories)</li>
+                <li>Regular exercise (HIIT + resistance training)</li>
+                <li>Front-load calories (larger breakfast/lunch)</li>
+                <li>Intermittent fasting (for FOXO3 pathway activation)</li>
+                <li>Limit high-histamine foods (aged cheese, wine, fermented foods)</li>
+                <li>Don't skip meals (FTO variant)</li>
+            </ul>
+
+            <h3>Priority 3 - Supplements</h3>
+            <ul class="checklist">
+                <li>Vitamin D3 4000-6000 IU daily + K2 + Magnesium</li>
+                <li>Preformed vitamin A sources (liver, eggs) or retinol supplement</li>
+                <li>EPA/DHA omega-3 (you're an excellent responder)</li>
+                <li>DAO enzyme supplement before histamine-rich meals</li>
+                <li>NAC for glutathione support (SOD2 efficient)</li>
+                <li>If homocysteine elevated: methylfolate 400-800mcg + methylcobalamin B12</li>
+            </ul>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p><strong>Disclaimer:</strong> This analysis is for educational and research purposes only. It is NOT medical advice. Genetic associations have varying effect sizes - lifestyle factors often matter more than genetics for most conditions. Consult a healthcare provider or genetic counselor for medical decisions.</p>
+            <p style="margin-top:15px;">Generated by 57+ specialized AI research agents | Sources: SNPedia, ClinVar, CPIC Guidelines, PharmGKB, PubMed (2020-2025)</p>
+            <p style="margin-top:15px;">Data: SelfDecode Pipeline 3.00 | 684,396 SNPs | GRCh38 Assembly</p>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu toggle
+        const menuToggle = document.querySelector('.menu-toggle');
+        const nav = document.querySelector('nav');
+
+        if (menuToggle) {
+            menuToggle.addEventListener('click', () => {
+                const expanded = menuToggle.getAttribute('aria-expanded') === 'true';
+                menuToggle.setAttribute('aria-expanded', !expanded);
+                nav.classList.toggle('menu-open');
+            });
+        }
+
+        // Search functionality
+        const searchInput = document.getElementById('gene-search');
+        if (searchInput) {
+            searchInput.addEventListener('input', (e) => {
+                const query = e.target.value.toLowerCase();
+                document.querySelectorAll('.card, section > div, table tr').forEach(el => {
+                    const text = el.textContent.toLowerCase();
+                    if (el.tagName === 'TR' && el.querySelector('th')) return; // Skip header rows
+                    el.style.display = text.includes(query) || query === '' ? '' : 'none';
+                });
+            });
+        }
+
+        // Dark mode toggle
+        const darkToggle = document.getElementById('dark-mode-toggle');
+        if (darkToggle) {
+            const isDark = localStorage.getItem('darkMode') === 'true';
+            if (isDark) document.body.classList.add('dark-mode');
+
+            darkToggle.addEventListener('click', () => {
+                document.body.classList.toggle('dark-mode');
+                localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
+            });
+        }
+
+        // Close menu when clicking on a link (for mobile)
+        document.querySelectorAll('nav a').forEach(link => {
+            link.addEventListener('click', () => {
+                if (window.innerWidth <= 768) {
+                    nav.classList.remove('menu-open');
+                    menuToggle.setAttribute('aria-expanded', 'false');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
